@@ -1,0 +1,15 @@
+body.container {
+  padding-top: 70px;
+  padding-bottom: 200px;
+}
+
+/* 瞬時に最下部にスクロールする処理
+:root {
+  scroll-behavior: auto;
+}
+*/
+
+p.card-text {
+  white-space: pre-wrap;
+  word-break: break-all;
+}

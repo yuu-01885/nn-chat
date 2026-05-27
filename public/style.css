@@ -1,6 +1,6 @@
 body.container {
   padding-top: 70px;
-  padding-bottom: 200px;
+  padding-bottom: 230px;
 }
 
 /* 瞬時に最下部にスクロールする処理
@@ -8,6 +8,10 @@ body.container {
   scroll-behavior: auto;
 }
 */
+
+.card {
+  scroll-margin-top: 65px;
+}
 
 p.card-text {
   white-space: pre-wrap;

@@ -25,7 +25,7 @@ html(lang="ja")
               a.dropdown-item(href="/logout") ログアウト 
     each post in posts 
       - const cardClass = (user === post.postedBy ? 'card my-3 border-primary' : 'card my-3')
-      div(class=cardClass)
+      div(class=cardClass id=`post-${post.id}` style="scroll-margin-top: 90px;")
         div.card-body
           div.d-flex.justify-content-between
             h5.card-title #{post.postedBy}
@@ -33,21 +33,42 @@ html(lang="ja")
                 i.bi-patch-check-fill.ms-1
             - const tooltipTitle = `<small>${post.absoluteCreatedAt}</small>`
             small.card-text.float-end(data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title=tooltipTitle) #{post.relativeCreatedAt}
+          if post.replyToUser
+            div.mb-2 
+              a(href=`#post-${post.replyToId}`).text-decoration-none 
+                small.text-primary 
+                  i.bi-reply-fill.me-2 #{post.replyToUser} に返信
           p.card-text.lead #{post.content}
+            if post.edited 
+              small.text-secondary.ms-2(style="font-size: 0.8rem;") (編集済み)
         - const isDeletable = (user === post.postedBy || user === 'admin')
-        if isDeletable 
-          div.card-footer.d-flex.justify-content-end
+        div.card-footer.d-flex.justify-content-between
+          button(
+            type="button"
+            class="btn btn-outline-primary btn-sm reply-button"
+            data-post-id=post.id
+            data-post-user=post.postedBy
+          ) 返信
+            i.bi-reply.ms-1
+          if isDeletable
             form(method="post" action="/posts/delete")
+              a(href=`/posts/${post.id}/edit`).btn.btn-outline-primary.btn-sm.me-2 編集
+                i.bi-pencil-square.ms-1
               input(type="hidden" name="id" value=post.id)
               input(type="hidden" name="oneTimeToken" value=oneTimeToken)
               button(type="submit").btn.btn-outline-danger.btn-sm 削除
                 i.bi-trash.ms-1
     div.fixed-bottom.p-4.bg-body
+      div.d-flex.align-items-center.mb-2 
+        div(id="replyingTo").text-secondary.me-2
+        button(type="button" id="cancelReply" class="btn btn-sm btn-outline-secondary d-none")
+          i.bi-x-lg
       form(method="post" action="/posts" name="message-form").container-fluid.row.g-3
         div.col-12
           textarea(name="content" rows="4" placeholder="Ctrl(Command)+Enterで送信できます").form-control
           input(type="hidden" name="oneTimeToken" value=oneTimeToken)
-        dic.col-12
+          input(type="hidden" name="replyToId" id="replyToId")
+        div.col-12
           button(type="submit").btn.btn-primary.float-end 送信
             i.bi-send.ms-1
 

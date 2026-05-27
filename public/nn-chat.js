@@ -1,4 +1,4 @@
-'use strct';
+'use strict';
 // 一番下を表示
 window.addEventListener('load', () => {
   window.scrollTo(0, document.body.scrollHeight);
@@ -35,4 +35,25 @@ function isPressedSubmitKey(event) {
 const tooltipTriggerElements = document.querySelectorAll('[data-bs-toggle="tooltip"]');
 tooltipTriggerElements.forEach((tooltipTriggerElement) => {
   new bootstrap.Tooltip(tooltipTriggerElement);
+});
+
+const replyButtons = document.querySelectorAll('.reply-button');
+const replyToIdInput = document.getElementById('replyToId');
+const replyingTo = document.getElementById('replyingTo');
+
+for (const button of replyButtons) {
+  button.addEventListener('click', () => {
+    const postId = button.dataset.postId;
+    const postUser = button.dataset.postUser;
+    replyToIdInput.value = postId;
+    replyingTo.textContent = `${postUser} に返信中`;
+    cancelReplyButton.classList.remove('d-none');
+  });
+}
+
+const cancelReplyButton = document.getElementById('cancelReply');
+cancelReplyButton.addEventListener('click', () => {
+  replyToIdInput.value = '';
+  replyingTo.textContent = '';
+  cancelReplyButton.classList.add('d-none');
 });
